@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">VIAConnect</string>
+    <string name="connect">Connect</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="signature">by Dorin Botan</string>
+</resources>
