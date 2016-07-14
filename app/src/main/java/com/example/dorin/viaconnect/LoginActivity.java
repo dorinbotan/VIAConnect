@@ -1,7 +1,7 @@
 package com.example.dorin.viaconnect;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -17,8 +17,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
     }
 
-    public void connectButtonPressed(View view)
-    {
+    public void connectButtonPressed(View view) {
         TextView signature = (TextView) findViewById(R.id.signatureTextView);
         EditText login = (EditText) findViewById(R.id.loginEditText);
         EditText password = (EditText) findViewById(R.id.passwordEditText);
@@ -26,18 +25,17 @@ public class LoginActivity extends AppCompatActivity {
         shade();
     }
 
-    private void shade()
-    {
+    private void shade() {
         hideSoftKeyboard();
 
-        ImageView shade = (ImageView) findViewById(R.id.imageView);
+        ImageView shade = (ImageView) findViewById(R.id.shadeImageView);
         ProgressBar progress = (ProgressBar) findViewById(R.id.progressBar);
         shade.setVisibility(View.VISIBLE);
         progress.setVisibility(View.VISIBLE);
     }
 
     private void hideSoftKeyboard() {
-        if(getCurrentFocus()!=null) {
+        if (getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }

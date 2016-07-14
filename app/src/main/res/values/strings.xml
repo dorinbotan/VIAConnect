@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VIAConnect</string>
+    <string name="app_name" translatable="false">VIAConnect</string>
     <string name="connect">Connect</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
