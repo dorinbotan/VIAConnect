@@ -1,37 +1,32 @@
 package com.example.dorin.viaconnect;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+
+import java.util.Random;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private EditText loginEditText;
+    private EditText passwordEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        loginEditText = (EditText) findViewById(R.id.loginEditText);
+        passwordEditText = (EditText) findViewById(R.id.passwordEditText);
     }
 
     public void connectButtonPressed(View view) {
-        TextView signature = (TextView) findViewById(R.id.signatureTextView);
-        EditText login = (EditText) findViewById(R.id.loginEditText);
-        EditText password = (EditText) findViewById(R.id.passwordEditText);
 
-        shade();
-    }
-
-    private void shade() {
-        hideSoftKeyboard();
-
-        ImageView shade = (ImageView) findViewById(R.id.shadeImageView);
-        ProgressBar progress = (ProgressBar) findViewById(R.id.progressBar);
-        shade.setVisibility(View.VISIBLE);
-        progress.setVisibility(View.VISIBLE);
     }
 
     private void hideSoftKeyboard() {

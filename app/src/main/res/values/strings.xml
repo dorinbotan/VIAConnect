@@ -3,5 +3,5 @@
     <string name="connect">Connect</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
-    <string name="signature">by Dorin Botan</string>
+    <string name="signature" translatable="false">v 0.1</string>
 </resources>

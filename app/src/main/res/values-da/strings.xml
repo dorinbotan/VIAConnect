@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VIAConnect</string>
+    <string name="password">Adgangskode</string>
+    <string name="login">Bruger-id</string>
+    <string name="connect">Næste</string>
+</resources>
