@@ -1,8 +1,6 @@
-package com.example.dorin.viaconnect;
+package com.example.dorin.viaconnect.WebClient;
 
-import android.os.Environment;
-
-import com.example.dorin.viaconnect.okhttp.MultipartBody;
+import com.example.dorin.viaconnect.WebClient.okhttp.MultipartBody;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +14,6 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Print {
-
     public final int CODE_OK = 200;
     public final int CODE_FOUND = 302;
     public final int DUPLEX_NONE = 1;
@@ -38,16 +35,20 @@ public class Print {
         this.client = client;
     }
 
+    // Check if user is logged in to print.via.dk (check if cookies expired)
     public boolean isLoggedIn() throws IOException {
-        Request requess = new Request.Builder()
+        // GET main page
+        Request request = new Request.Builder()
                 .url("https://print.via.dk/index.cfm")
                 .build();
 
-        Response response = client.newCall(requess).execute();
+        Response response = client.newCall(request).execute();
 
+        // If successful, user has access to it
         return response.code() == CODE_OK;
     }
 
+    // Log in to print.via.dk
     public boolean logIn(String login, String password) throws IOException {
         RequestBody formBody = new FormBody.Builder()
                 .add("LoginAction", "login")
@@ -63,18 +64,30 @@ public class Print {
 
         Response response = client.newCall(request).execute();
 
+        // If successful, user is redirected to main page
         return response.code() == CODE_FOUND;
     }
 
-    public boolean send() throws IOException {
+    // Log out from print.via.dk
+    public void logOut() throws IOException {
+        Request request = new Request.Builder()
+                .url("https://print.via.dk/login.cfm?message=Logout")
+                .build();
+
+        // Close connection with the server
+        client.newCall(request).execute().close();
+    }
+
+    // Upload a file for printing
+    public boolean sendJob(String fileName, String mediaType, File file) throws IOException {
+        // Place file in multipart/form-data message
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addPart(
                         Headers.of("Content-Disposition", "form-data; name=\"type\""),
                         RequestBody.create(null, "file"))
                 .addFormDataPart(
-                        "FileToPrint", "img.png", RequestBody.create(MediaType.parse("image/png"),
-                                new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/img.png")))
+                        "FileToPrint", fileName, RequestBody.create(MediaType.parse(mediaType), file))
                 .build();
 
         Request request = new Request.Builder()
@@ -84,11 +97,14 @@ public class Print {
 
         Response response = client.newCall(request).execute();
 
-        return true;
+        // If successful, user is redirected to main page
+        return response.code() == CODE_FOUND;
     }
 
-    public void print(String JID, String PID, String numberOfCopies, String pageFrom,
-                      String pageTo, String duplex, boolean bw) throws IOException {
+    // TODO fix parameters
+    // Send an uploaded file for printing
+    public void printJob(String JID, String PID, String numberOfCopies, String pageFrom,
+                         String pageTo, String duplex, boolean bw) throws IOException {
         RequestBody formBody = new FormBody.Builder()
                 .add("JID", JID)
                 .add("PID", PID)
@@ -108,7 +124,16 @@ public class Print {
         client.newCall(request).execute().close();
     }
 
-    // TODO use regex here
+    // Remove file from printing list
+    public void deleteJob(String JID) throws IOException {
+        Request request = new Request.Builder()
+                .url("https://print.via.dk/index.cfm?action=deletejob&jid=" + JID)
+                .build();
+
+        client.newCall(request).execute();
+    }
+
+    // TODO finish (use regex here)
     private String[] getJID() throws IOException {
         Request request = new Request.Builder()
                 .url("https://print.via.dk/index.cfm?Message=JobAdded")
@@ -124,13 +149,5 @@ public class Print {
         String question = part.substring(0, part.indexOf(end));
 
         return new String[]{question};
-    }
-
-    public void logOut() throws IOException {
-        Request request = new Request.Builder()
-                .url("https://print.via.dk/login.cfm?message=Logout")
-                .build();
-
-        client.newCall(request).execute();
     }
 }

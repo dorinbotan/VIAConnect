@@ -4,4 +4,5 @@
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="signature" translatable="false">v 0.1</string>
+    <string name="title_activity_print">PrintActivity</string>
 </resources>

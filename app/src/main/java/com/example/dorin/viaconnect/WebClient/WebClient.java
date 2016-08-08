@@ -1,5 +1,9 @@
-package com.example.dorin.viaconnect;
+package com.example.dorin.viaconnect.WebClient;
 
+import android.app.Application;
+import android.os.AsyncTask;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,11 +14,18 @@ import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
-public class WebClient {
+public class WebClient extends Application {
+    public String login;
+    public String password;
+
     private OkHttpClient client;
-    private Print print;
+    public Print print;
 
     public WebClient() {
+
+    }
+
+    public void initiate() {
         client = new OkHttpClient.Builder()
                 .cookieJar(new CookieJar() {
                     private final HashMap<String, HashMap<String, Cookie>> cookieStore = new HashMap<>();
@@ -51,5 +62,13 @@ public class WebClient {
                 .build();
 
         print = new Print(client);
+    }
+
+    public boolean logIn(String login, String password) {
+        try {
+            return print.logIn(login, password);
+        } catch (IOException e) {
+            return false;
+        }
     }
 }
