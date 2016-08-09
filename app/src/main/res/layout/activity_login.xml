@@ -36,7 +36,8 @@
             android:hint="@string/login"
             android:inputType="textPersonName"
             android:textColor="@color/colorAccent6"
-            android:textColorHint="@color/colorPrimaryDark" />
+            android:textColorHint="@color/colorPrimaryDark"
+            android:text="224187" />
 
         <EditText
             android:id="@+id/passwordEditText"
@@ -52,7 +53,8 @@
             android:hint="@string/password"
             android:inputType="textPassword"
             android:textColor="@color/colorAccent6"
-            android:textColorHint="@color/colorPrimaryDark" />
+            android:textColorHint="@color/colorPrimaryDark"
+            android:text="CConcept1+" />
 
         <Button
             android:id="@+id/connectButton"

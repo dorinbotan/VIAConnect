@@ -1,8 +1,14 @@
 package com.example.dorin.viaconnect.WebClient;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
+import com.example.dorin.viaconnect.LoginActivity;
+import com.example.dorin.viaconnect.PrintActivity;
+import com.example.dorin.viaconnect.WebClient.Print.Print;
+import com.example.dorin.viaconnect.WebClient.Print.PrintJob;
+import com.example.dorin.viaconnect.WebClient.Shop.Shop;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,17 +21,11 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 
 public class WebClient extends Application {
-    public String login;
-    public String password;
-
     private OkHttpClient client;
     public Print print;
+    public Shop shop;
 
     public WebClient() {
-
-    }
-
-    public void initiate() {
         client = new OkHttpClient.Builder()
                 .cookieJar(new CookieJar() {
                     private final HashMap<String, HashMap<String, Cookie>> cookieStore = new HashMap<>();
@@ -62,13 +62,118 @@ public class WebClient extends Application {
                 .build();
 
         print = new Print(client);
+        shop = new Shop(client);
     }
 
-    public boolean logIn(String login, String password) {
+    public boolean isLoggedIn() {
         try {
-            return print.logIn(login, password);
+            return print.isLoggedIn();
         } catch (IOException e) {
             return false;
         }
+    }
+
+    public void logIn(final String login, final String password, final LoginActivity activity) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    if (print.logIn(login, password))
+                        activity.startPrintActivity();
+                    else
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                activity.showError();
+                            }
+                        });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void logOut() {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    print.logOut();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void sendPrintJob(final String fileName, final String mediaType, final File file,
+                             final LoginActivity activity) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    if (print.sendJob(fileName, mediaType, file))
+                        activity.startPrintActivity();
+                    else
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                activity.showError();
+                            }
+                        });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void sendPrintJob(final String fileName, final String mediaType, final File file) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    print.sendJob(fileName, mediaType, file);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void deletePrintJob(String JID) {
+        try {
+            print.deleteJob(JID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void printJob(final String JID, final String PID, final int numberOfCopies, final int pageFrom,
+                         final int pageTo, final String duplex, final boolean bw) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    print.printJob(JID, PID, numberOfCopies, pageFrom, pageTo, duplex, bw);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void getPrintJobs(final PrintActivity activity) {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    final ArrayList<PrintJob> printJobs = print.getPrintJobs();
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            activity.updateListView(printJobs);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

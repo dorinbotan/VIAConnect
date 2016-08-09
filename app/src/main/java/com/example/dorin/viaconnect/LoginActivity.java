@@ -1,27 +1,19 @@
 package com.example.dorin.viaconnect;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.dorin.viaconnect.WebClient.WebClient;
 
 import java.io.File;
-import java.io.IOException;
 
 public class LoginActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
@@ -37,23 +29,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // TODO remove me
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//        StrictMode.setThreadPolicy(policy);
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
 
         setup();
-        webClient.initiate();
 
-        Intent intent = getIntent();
-        String action = intent.getAction();
-        String type = intent.getType();
-
-        if (Intent.ACTION_SEND.equals(action) && type != null)
-            if (type.startsWith("image/"))
-                try {
-                    handleSendImage(intent);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        handleIntent(getIntent());
     }
 
     private void setup() {
@@ -71,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER)
                     try {
                         connectButtonPressed(null);
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 return false;
@@ -81,97 +61,65 @@ public class LoginActivity extends AppCompatActivity {
         webClient = (WebClient) getApplicationContext();
     }
 
-    private void handleSendImage(Intent intent) throws IOException {
-        Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+    private void handleIntent(Intent intent) {
+        String action = intent.getAction();
 
-        if (imageUri != null) {
-            imageUri = Uri.parse(getRealPathFromUri(this, imageUri));
-            File imageFile = new File(imageUri.getEncodedPath());
-            String imagePath = imageFile.getAbsolutePath();
-            String imageName = imagePath.substring(imagePath.lastIndexOf('/'));
+        if (Intent.ACTION_SEND.equals(action)) {
+            Uri fileUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            fileUri = Uri.parse(StringParser.getRealPathFromUri(getApplicationContext(), fileUri));
+            File file = new File(fileUri.getEncodedPath());
+            String filePath = file.getAbsolutePath();
+            String fileName = filePath.substring(filePath.lastIndexOf('/'));
 
-            if (webClient.print.isLoggedIn()) {
-                webClient.print.sendJob(imageName, "image/*", new File(imageUri.getEncodedPath()));
-            } else {
-                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-
-                ImageView image = (ImageView) findViewById(R.id.logoImage);
-                image.setImageBitmap(bitmap);
+            if (webClient.isLoggedIn()) {
+                mProgressDialog.show();
+                webClient.sendPrintJob(fileName, intent.getType(), new File(fileUri.getEncodedPath()), this);
             }
         }
     }
 
-    private static String getRealPathFromUri(Activity activity, Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = activity.managedQuery(contentUri, proj, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
-
-    public void connectButtonPressed(View view) throws IOException {
-        hideKeyboard();
-
-        if (checkInput()) {
+    public void connectButtonPressed(View view) {
+        if (validateInput()) {
             mProgressDialog.show();
-
-            new Thread(new Runnable() {
-                public void run() {
-                    boolean result = webClient.logIn(loginEditText.getText().toString(), passwordEditText.getText().toString());
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mProgressDialog.hide();
-                        }
-                    });
-
-                    if (result)
-                        switchActivity();
-                    else
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                showError();
-                            }
-                        });
-                }
-            }).start();
+            webClient.logIn(loginEditText.getText().toString(), passwordEditText.getText().toString(), this);
         }
     }
 
-    public void switchActivity() {
-        Intent intent = new Intent(this, PrintActivity.class);
-        startActivity(intent);
+    public void startPrintActivity() {
+        startActivity(new Intent(this, PrintActivity.class));
     }
 
     public void showError() {
-        Toast.makeText(this, "Error", Toast.LENGTH_LONG);
+        passwordEditText.setError("Wrong input");
+        passwordEditText.requestFocus();
+
+        mProgressDialog.hide();
     }
 
-    private boolean checkInput() {
-        return checkLogin() && checkPassword();
+    private boolean validateInput() {
+        boolean toReturn = true;
+
+        if (!validateLogin()) {
+            loginEditText.setError("Wrong input");
+            loginEditText.requestFocus();
+            toReturn = false;
+        }
+
+        if (!validatePassword()) {
+            passwordEditText.setError("Wrong input");
+            passwordEditText.requestFocus();
+            toReturn = false;
+        }
+
+        return toReturn;
     }
 
-    private boolean checkLogin() {
+    private boolean validateLogin() {
         return loginEditText.getText().length() == 6;
     }
 
-    private boolean checkPassword() {
+    private boolean validatePassword() {
         return passwordEditText.getText().length() > 3;
-    }
-
-    private void hideKeyboard() {
-        if (getCurrentFocus() != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-    }
-
-    private void showKeyboard(View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        view.requestFocus();
-        inputMethodManager.showSoftInput(view, 0);
     }
 
     @Override

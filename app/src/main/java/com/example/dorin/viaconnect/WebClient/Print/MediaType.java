@@ -1,4 +1,4 @@
-package com.example.dorin.viaconnect.WebClient;
+package com.example.dorin.viaconnect.WebClient.Print;
 
 // Lists all MediaTypes supported by printing service
 public class MediaType {
