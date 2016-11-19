@@ -1,8 +1,39 @@
 <resources>
+
     <string name="app_name" translatable="false">VIAConnect</string>
+
     <string name="connect">Connect</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="signature" translatable="false">v 0.1</string>
     <string name="files">Files</string>
+
+    <!-- Printers -->
+    <string name="clothing_mechanics_in_mejlgade">Clothing mechanics in Mejlgade</string>
+    <string name="cfuihe_hp_p3015" translatable="false">CFUIHE-HP-P3015</string>
+    <string name="campus_aarhus_c">Campus Aarhus C</string>
+    <string name="campus_aarhus_c_plotter_p819">Campus Aarhus C Plotter P819</string>
+    <string name="campus_aarhus_c_plotter_p998">Campus Aarhus C Plotter P998</string>
+    <string name="campus_aarhus_n">Campus Aarhus N</string>
+    <string name="campus_herning">Campus Herning</string>
+    <string name="campus_herning_plotter_p758">Campus Herning Plotter P758</string>
+    <string name="campus_holstebro">Campus Holstebro</string>
+    <string name="campus_holstebro_plotter_p848">Campus Holstebro Plotter P848</string>
+    <string name="campus_horsens">Campus Horsens</string>
+    <string name="campus_horsens_plotter_p301">Campus Horsens Plotter P301</string>
+    <string name="campus_horsens_plotter_p302">Campus Horsens Plotter P302</string>
+    <string name="campus_horsens_plotter_p883_black">Campus Horsens Plotter P883 Black</string>
+    <string name="campus_horsens_plotter_p883_color">Campus Horsens Plotter P883 Color</string>
+    <string name="campus_randers">Campus Randers</string>
+    <string name="campus_silkeborg">Campus Silkeborg</string>
+    <string name="campus_viborg">Campus Viborg</string>
+    <string name="ikast">IKAST</string>
+    <string name="teacher_training_in_norre_nissum">Teacher training in Nørre Nissum</string>
+    <string name="teacher_training_in_skive">Teacher training in Skive</string>
+    <string name="multiplatform_storytelling_and_production">Multiplatform Storytelling and Production</string>
+    <string name="teacher_training_in_grena">Teacher training in Grenå</string>
+    <string name="thisted_black">Thisted Black</string>
+    <string name="thisted_color">Thisted Color</string>
+    <string name="via_print">VIA-Print</string>
+
 </resources>

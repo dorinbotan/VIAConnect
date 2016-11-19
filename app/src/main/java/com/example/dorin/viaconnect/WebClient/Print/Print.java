@@ -21,15 +21,33 @@ public class Print {
     public final static int DUPLEX_NONE = 1;
     public final static int DUPLEX_LONG_SIDE = 2;
     public final static int DUPLEX_SHORT_SIDE = 3;
-    // TODO add all printers
+
+    public final static String PID_CLOTHING_MECHANICS_IN_MEJLGADE = "Eqc=";
+    public final static String PID_CFUIHE_HP_P3015 = "EaY=";
     public final static String PID_CAMPUS_AARHUS_C = "EKg=";
+    public final static String PID_CAMPUS_AARHUS_C_PLOTTER_P819 = "EqY=";
+    public final static String PID_CAMPUS_AARHUS_C_PLOTTER_P998 = "F68=";
     public final static String PID_CAMPUS_AARHUS_N = "Eas=";
     public final static String PID_CAMPUS_HERNING = "Ea0=";
+    public final static String PID_CAMPUS_HERNING_PLOTTER_P758 = "Eqk=";
     public final static String PID_CAMPUS_HOLSTEBRO = "Eac=";
+    public final static String PID_CAMPUS_HOLSTEBRO_PLOTTER_P848 = "Eqo=";
     public final static String PID_CAMPUS_HORSENS = "E68=";
+    public final static String PID_CAMPUS_HORSENS_PLOTTER_P301 = "Eqw=";
+    public final static String PID_CAMPUS_HORSENS_PLOTTER_P302 = "Eq0=";
+    public final static String PID_CAMPUS_HORSENS_PLOTTER_P883_BLACK = "Eqs=";
+    public final static String PID_CAMPUS_HORSENS_PLOTTER_P883_COLOR = "Eqg=";
     public final static String PID_CAMPUS_RANDERS = "E64=";
     public final static String PID_CAMPUS_SILKEBORG = "E6w=";
     public final static String PID_CAMPUS_VIBORG = "Eag=";
+    public final static String PID_IKAST = "Eao=";
+    public final static String PID_TEACHER_TRAINING_IN_NORRE_NISSUM = "EKk=";
+    public final static String PID_TEACHER_TRAINING_IN_NORRE_SKIVE = "Fqk=";
+    public final static String PID_MULTIPLATFORM_STORYTELLING_AND_PRODUCTION = "Ea8=";
+    public final static String PID_TEACEHR_TRAINING_IN_GRENA = "Fqg=";
+    public final static String PID_THIRSTED_BLACK = "EK8=";
+    public final static String PID_THIRSTED_COLOR = "EKw=";
+    public final static String PID_VIA_PRINT = "HA==";
 
     private OkHttpClient client;
 
@@ -37,7 +55,7 @@ public class Print {
         this.client = client;
     }
 
-    // Check if user is logged in to print.via.dk (check if session expired)
+    // Check if user is logged in to print.via.dk (see if session expired)
     public boolean isLoggedIn() throws IOException {
         // GET main page
         Request request = new Request.Builder()
@@ -51,7 +69,6 @@ public class Print {
     }
 
     // Log in to print.via.dk
-    
     public boolean logIn(String login, String password) throws IOException {
         RequestBody formBody = new FormBody.Builder()
                 .add("LoginAction", "login")
@@ -84,6 +101,7 @@ public class Print {
     // Upload a file for printing
     public boolean sendJob(String fileName, String mediaType, File file) throws IOException {
         // Place file in multipart/form-data message
+//        Log.e(file.getName())file.
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addPart(

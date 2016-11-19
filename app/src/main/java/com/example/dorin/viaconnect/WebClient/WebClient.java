@@ -6,7 +6,6 @@ import com.example.dorin.viaconnect.LoginActivity;
 import com.example.dorin.viaconnect.PrintActivity;
 import com.example.dorin.viaconnect.WebClient.Print.Print;
 import com.example.dorin.viaconnect.WebClient.Print.PrintJob;
-import com.example.dorin.viaconnect.WebClient.Shop.Shop;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +22,6 @@ import okhttp3.OkHttpClient;
 public class WebClient extends Application {
     private OkHttpClient client;
     public Print print;
-    public Shop shop;
 
     public WebClient() {
         client = new OkHttpClient.Builder()
@@ -62,7 +60,6 @@ public class WebClient extends Application {
                 .build();
 
         print = new Print(client);
-        shop = new Shop(client);
     }
 
     public boolean isLoggedIn() {

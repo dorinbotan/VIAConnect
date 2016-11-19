@@ -67,12 +67,13 @@ public class LoginActivity extends AppCompatActivity {
             webClient = (WebClient) getApplicationContext();
     }
 
+    // TODO: handle login properly
     // Handle a file being "shared" intent by sending it to the print server
     private void handleIntent(Intent intent) {
         String action = intent.getAction();
 
         if (Intent.ACTION_SEND.equals(action)) {
-            Uri fileUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+            Uri fileUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             fileUri = Uri.parse(StringParser.getRealPathFromUri(getApplicationContext(), fileUri));
             File file = new File(fileUri.getEncodedPath());
             String filePath = file.getAbsolutePath();

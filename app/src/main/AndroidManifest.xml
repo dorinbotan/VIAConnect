@@ -3,31 +3,41 @@
     package="com.example.dorin.viaconnect">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".WebClient.WebClient"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             // Catch Share/Send intents
+
+        </activity>
+
+        <activity
+            android:name=".PrintActivity"
+            android:label="@string/files"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".LoginActivity"
+            android:screenOrientation="portrait">
+
             <intent-filter
                 android:icon="@drawable/viauc_logo"
                 android:label="VIA Print">
                 <action android:name="android.intent.action.SEND" />
-
                 <category android:name="android.intent.category.DEFAULT" />
 
+                <!--TODO add all supported types-->
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
                 <data android:mimeType="application/msword" />
                 <data android:mimeType="application/vnd.ms-excel" />
@@ -44,12 +54,6 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".PrintActivity"
-            android:label="@string/files"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".LoginActivity" />
     </application>
 
 </manifest>

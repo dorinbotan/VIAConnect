@@ -20,7 +20,6 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.example.dorin.viaconnect.Utils.ShakeListener;
 import com.example.dorin.viaconnect.Utils.StringParser;
 import com.example.dorin.viaconnect.WebClient.Print.MediaType;
 import com.example.dorin.viaconnect.WebClient.Print.Print;
@@ -37,7 +36,6 @@ public class PrintActivity extends AppCompatActivity {
     private ArrayList<PrintJob> printJobs;
 
     private Vibrator vibrator;
-    private ShakeListener mShakeListener;
 
     private SwipeMenuListView printJobList;
     private ArrayAdapter<String> adapter;
@@ -77,19 +75,6 @@ public class PrintActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 performFileSearch();
-            }
-        });
-
-        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        mShakeListener = new ShakeListener(this);
-        mShakeListener.setOnShakeListener(new ShakeListener.OnShakeListener() {
-            public void onShake() {
-                vibrator.vibrate(150);
-                try {
-                    buttonClicked(null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
 
@@ -227,13 +212,11 @@ public class PrintActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        mShakeListener.resume();
         super.onResume();
     }
 
     @Override
     public void onPause() {
-        mShakeListener.pause();
         super.onPause();
     }
 

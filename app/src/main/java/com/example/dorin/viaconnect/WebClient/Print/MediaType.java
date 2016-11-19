@@ -23,7 +23,7 @@ public class MediaType {
     public final static String TXT = "text/plain";
 
     public static String[] getAllTypes() {
-        return new String[]{DOCX, DOC, XLS, PPTX, PPT, SXW,
-                SXG, PDF, JPG, GIF, PNG, TIF, BMP, TXT};
+        return new String[]{ DOCX, DOC, XLS, PPTX, PPT, SXW,
+                SXG, PDF, JPG, GIF, PNG, TIF, BMP, TXT };
     }
 }

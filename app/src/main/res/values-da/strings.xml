@@ -1,8 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VIAConnect</string>
-    <string name="password">Adgangskode</string>
-    <string name="login">Bruger-id</string>
+
     <string name="connect">Næste</string>
+    <string name="login">Bruger-id</string>
+    <string name="password">Adgangskode</string>
     <string name="files">Filer</string>
+
+    <!-- Printers -->
+    <string name="clothing_mechanics_in_mejlgade">Beklædningshåndværker i Mejlgade</string>
+    <string name="teacher_training_in_norre_nissum">Læreruddannelsen i Nørre Nissum</string>
+    <string name="teacher_training_in_skive">Læreruddannelsen i Skive</string>
+    <string name="multiplatform_storytelling_and_production">Multiplatform Storytelling og Produktion</string>
+    <string name="teacher_training_in_grena">Pædagoguddannelsen i Grenå</string>
+
 </resources>
