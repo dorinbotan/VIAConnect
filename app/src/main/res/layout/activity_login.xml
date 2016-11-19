@@ -20,41 +20,35 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center_horizontal">
+        android:layout_weight="1">
 
         <EditText
             android:id="@+id/loginEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:ems="10"
             android:hint="@string/login"
-            android:inputType="textPersonName"
-            android:textColor="@color/colorAccent6"
+            android:inputType="number"
+            android:textColor="@color/colorAccent2"
             android:textColorHint="@color/colorPrimaryDark"
-            android:text="224187" />
+            android:text="224187"
+            android:ems="10"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
 
         <EditText
             android:id="@+id/passwordEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/loginEditText"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
             android:ems="10"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:textColor="@color/colorAccent6"
+            android:textColor="@color/colorAccent2"
             android:textColorHint="@color/colorPrimaryDark"
-            android:text="CConcept1+" />
+            android:text="CConcept1+"
+            android:layout_below="@+id/loginEditText"
+            android:layout_alignEnd="@+id/loginEditText" />
 
         <Button
             android:id="@+id/connectButton"
@@ -65,7 +59,7 @@
             android:layout_below="@+id/passwordEditText"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:background="@color/colorAccent6"
+            android:background="@color/colorAccent2"
             android:onClick="connectButtonPressed"
             android:text="@string/connect"
             android:textAllCaps="false"

@@ -1,4 +1,4 @@
-package com.example.dorin.viaconnect;
+package com.example.dorin.viaconnect.Utils;
 
 import android.content.Context;
 import android.database.Cursor;

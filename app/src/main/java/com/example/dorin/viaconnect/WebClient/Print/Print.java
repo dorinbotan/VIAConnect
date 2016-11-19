@@ -1,6 +1,6 @@
 package com.example.dorin.viaconnect.WebClient.Print;
 
-import com.example.dorin.viaconnect.StringParser;
+import com.example.dorin.viaconnect.Utils.StringParser;
 import com.example.dorin.viaconnect.WebClient.okhttp.MultipartBody;
 
 import java.io.File;
@@ -51,6 +51,7 @@ public class Print {
     }
 
     // Log in to print.via.dk
+    
     public boolean logIn(String login, String password) throws IOException {
         RequestBody formBody = new FormBody.Builder()
                 .add("LoginAction", "login")
@@ -104,14 +105,14 @@ public class Print {
     }
 
     public void printJob(String JID, String PID, int numberOfCopies, int pageFrom,
-                         int pageTo, String duplex, boolean bw) throws IOException {
+                         int pageTo, int duplex, boolean bw) throws IOException {
         RequestBody formBody = new FormBody.Builder()
                 .add("JID", JID)
                 .add("PID", PID)
                 .add("NumberOfCopies", numberOfCopies + "")
                 .add("PageFrom", pageFrom + "")
                 .add("PageTo", pageTo + "")
-                .add("Duplex", duplex)
+                .add("Duplex", duplex + "")
                 .add("PrintBW", bw + "")
                 .add("method", "printjob")
                 .build();

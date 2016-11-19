@@ -1,6 +1,6 @@
 package com.example.dorin.viaconnect.WebClient.Shop;
 
-import com.example.dorin.viaconnect.StringParser;
+import com.example.dorin.viaconnect.Utils.StringParser;
 
 import java.io.IOException;
 

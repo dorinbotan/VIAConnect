@@ -105,6 +105,7 @@ public class WebClient extends Application {
         }).start();
     }
 
+    // Send print job and notify LoginActivity when done
     public void sendPrintJob(final String fileName, final String mediaType, final File file,
                              final LoginActivity activity) {
         new Thread(new Runnable() {
@@ -147,7 +148,7 @@ public class WebClient extends Application {
     }
 
     public void printJob(final String JID, final String PID, final int numberOfCopies, final int pageFrom,
-                         final int pageTo, final String duplex, final boolean bw) {
+                         final int pageTo, final int duplex, final boolean bw) {
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -159,6 +160,7 @@ public class WebClient extends Application {
         }).start();
     }
 
+    // Get the list of files available for printing
     public void getPrintJobs(final PrintActivity activity) {
         new Thread(new Runnable() {
             public void run() {

@@ -3,9 +3,9 @@
     package="com.example.dorin.viaconnect">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".WebClient.WebClient"
@@ -47,9 +47,9 @@
 
         <activity
             android:name=".PrintActivity"
-            android:label="@string/title_activity_print"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:label="@string/files"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".LoginActivity" />
     </application>
 
 </manifest>

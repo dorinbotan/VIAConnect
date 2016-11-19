@@ -1,8 +1,11 @@
 package com.example.dorin.viaconnect;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -11,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.dorin.viaconnect.Utils.StringParser;
 import com.example.dorin.viaconnect.WebClient.WebClient;
 
 import java.io.File;
@@ -36,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         handleIntent(getIntent());
     }
 
+    // Setup the layout
     private void setup() {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Please wait...");
@@ -58,9 +63,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        webClient = (WebClient) getApplicationContext();
+        if (isOnline())
+            webClient = (WebClient) getApplicationContext();
     }
 
+    // Handle a file being "shared" intent by sending it to the print server
     private void handleIntent(Intent intent) {
         String action = intent.getAction();
 
@@ -78,8 +85,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // Check input and move to next activity
     public void connectButtonPressed(View view) {
-        if (validateInput()) {
+        if (validateInput() && isOnline()) {
             mProgressDialog.show();
             webClient.logIn(loginEditText.getText().toString(), passwordEditText.getText().toString(), this);
         }
@@ -94,6 +102,13 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText.requestFocus();
 
         mProgressDialog.hide();
+    }
+
+    // Check internet connection
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     private boolean validateInput() {

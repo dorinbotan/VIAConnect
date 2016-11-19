@@ -1,15 +1,15 @@
-package com.example.dorin.viaconnect;
+package com.example.dorin.viaconnect.Utils;
 
 import android.content.Context;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 
 public class ShakeListener implements SensorListener {
-    private static final int FORCE_THRESHOLD = 500;
+    private static final int FORCE_THRESHOLD = 1000;
     private static final int TIME_THRESHOLD = 100;
     private static final int SHAKE_TIMEOUT = 500;
-    private static final int SHAKE_DURATION = 1000;
-    private static final int SHAKE_COUNT = 3;
+    private static final int SHAKE_DURATION = 2000;
+    private static final int SHAKE_COUNT = 6;
 
     private SensorManager mSensorMgr;
     private float mLastX = -1.0f, mLastY = -1.0f, mLastZ = -1.0f;
@@ -35,9 +35,14 @@ public class ShakeListener implements SensorListener {
 
     public void resume() {
         mSensorMgr = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
-
-        if (!mSensorMgr.registerListener(this, SensorManager.SENSOR_ACCELEROMETER, SensorManager.SENSOR_DELAY_GAME))
+        if (mSensorMgr == null) {
+            throw new UnsupportedOperationException("Sensors not supported");
+        }
+        boolean supported = mSensorMgr.registerListener(this, SensorManager.SENSOR_ACCELEROMETER, SensorManager.SENSOR_DELAY_GAME);
+        if (!supported) {
             mSensorMgr.unregisterListener(this, SensorManager.SENSOR_ACCELEROMETER);
+            throw new UnsupportedOperationException("Accelerometer not supported");
+        }
     }
 
     public void pause() {
@@ -54,19 +59,20 @@ public class ShakeListener implements SensorListener {
         if (sensor != SensorManager.SENSOR_ACCELEROMETER) return;
         long now = System.currentTimeMillis();
 
-        if ((now - mLastForce) > SHAKE_TIMEOUT)
+        if ((now - mLastForce) > SHAKE_TIMEOUT) {
             mShakeCount = 0;
+        }
 
         if ((now - mLastTime) > TIME_THRESHOLD) {
             long diff = now - mLastTime;
-            float speed = Math.abs(values[SensorManager.DATA_X] + values[SensorManager.DATA_Y] +
-                    values[SensorManager.DATA_Z] - mLastX - mLastY - mLastZ) / diff * 10000;
+            float speed = Math.abs(values[SensorManager.DATA_X] + values[SensorManager.DATA_Y] + values[SensorManager.DATA_Z] - mLastX - mLastY - mLastZ) / diff * 10000;
             if (speed > FORCE_THRESHOLD) {
                 if ((++mShakeCount >= SHAKE_COUNT) && (now - mLastShake > SHAKE_DURATION)) {
                     mLastShake = now;
                     mShakeCount = 0;
-                    if (mShakeListener != null)
+                    if (mShakeListener != null) {
                         mShakeListener.onShake();
+                    }
                 }
                 mLastForce = now;
             }
