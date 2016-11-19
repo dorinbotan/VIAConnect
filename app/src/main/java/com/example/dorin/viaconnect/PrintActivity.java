@@ -1,13 +1,13 @@
 package com.example.dorin.viaconnect;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,8 +34,6 @@ public class PrintActivity extends AppCompatActivity {
     private static final int READ_REQUEST_CODE = 42;
 
     private ArrayList<PrintJob> printJobs;
-
-    private Vibrator vibrator;
 
     private SwipeMenuListView printJobList;
     private ArrayAdapter<String> adapter;
@@ -171,13 +169,9 @@ public class PrintActivity extends AppCompatActivity {
                     String fileType = contentResolver.getType(fileUri);
 
                     fileUri = Uri.parse(StringParser.getRealPathFromUri(getApplicationContext(), fileUri));
-                    File file = new File(fileUri.getEncodedPath());
-                    String filePath = file.getAbsolutePath();
-                    String fileName = filePath.substring(filePath.lastIndexOf('/'));
 
-                    if (webClient.isLoggedIn()) {
-                        webClient.sendPrintJob(fileName, fileType, new File(fileUri.getEncodedPath()));
-                    }
+                    if (webClient.isLoggedIn())
+                        webClient.sendPrintJob(fileType, new File(fileUri.getEncodedPath()));
                 }
                 break;
         }
@@ -208,20 +202,5 @@ public class PrintActivity extends AppCompatActivity {
                 names.add(p.name + "\nDate:  " + p.dateTime);
 
         adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 }

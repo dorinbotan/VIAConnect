@@ -75,13 +75,10 @@ public class LoginActivity extends AppCompatActivity {
         if (Intent.ACTION_SEND.equals(action)) {
             Uri fileUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
             fileUri = Uri.parse(StringParser.getRealPathFromUri(getApplicationContext(), fileUri));
-            File file = new File(fileUri.getEncodedPath());
-            String filePath = file.getAbsolutePath();
-            String fileName = filePath.substring(filePath.lastIndexOf('/'));
 
             if (webClient.isLoggedIn()) {
                 mProgressDialog.show();
-                webClient.sendPrintJob(fileName, intent.getType(), new File(fileUri.getEncodedPath()), this);
+                webClient.sendPrintJob(intent.getType(), new File(fileUri.getEncodedPath()), this);
             }
         }
     }

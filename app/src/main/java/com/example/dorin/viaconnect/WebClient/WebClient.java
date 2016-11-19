@@ -103,12 +103,12 @@ public class WebClient extends Application {
     }
 
     // Send print job and notify LoginActivity when done
-    public void sendPrintJob(final String fileName, final String mediaType, final File file,
+    public void sendPrintJob(final String mediaType, final File file,
                              final LoginActivity activity) {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    if (print.sendJob(fileName, mediaType, file))
+                    if (print.sendJob(mediaType, file))
                         activity.startPrintActivity();
                     else
                         activity.runOnUiThread(new Runnable() {
@@ -124,11 +124,11 @@ public class WebClient extends Application {
         }).start();
     }
 
-    public void sendPrintJob(final String fileName, final String mediaType, final File file) {
+    public void sendPrintJob(final String mediaType, final File file) {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    print.sendJob(fileName, mediaType, file);
+                    print.sendJob(mediaType, file);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

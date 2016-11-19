@@ -34,7 +34,6 @@ public class StringParser {
         Log.i("URI", uri + "");
         String result = uri + "";
         // DocumentProvider
-        //  if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
         if (isKitKat && (result.contains("media.documents"))) {
             String[] ary = result.split("/");
             int length = ary.length;
@@ -45,9 +44,7 @@ public class StringParser {
             if ("image".equals(type))
                 contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             final String selection = "_id=?";
-            final String[] selectionArgs = new String[]{
-                    dat[1]
-            };
+            final String[] selectionArgs = new String[]{ dat[1] };
             return getDataColumn(context, contentUri, selection, selectionArgs);
         } else if ("content".equalsIgnoreCase(uri.getScheme()))
             return getDataColumn(context, uri, null, null);

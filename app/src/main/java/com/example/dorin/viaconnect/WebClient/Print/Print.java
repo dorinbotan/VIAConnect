@@ -1,5 +1,7 @@
 package com.example.dorin.viaconnect.WebClient.Print;
 
+import android.util.Log;
+
 import com.example.dorin.viaconnect.Utils.StringParser;
 import com.example.dorin.viaconnect.WebClient.okhttp.MultipartBody;
 
@@ -55,7 +57,7 @@ public class Print {
         this.client = client;
     }
 
-    // Check if user is logged in to print.via.dk (see if session expired)
+    // Check if user is logged in to print.via.dk (session not expired)
     public boolean isLoggedIn() throws IOException {
         // GET main page
         Request request = new Request.Builder()
@@ -98,17 +100,17 @@ public class Print {
         client.newCall(request).execute().close();
     }
 
+    // TODO mediaType - is it needed?
     // Upload a file for printing
-    public boolean sendJob(String fileName, String mediaType, File file) throws IOException {
+    public boolean sendJob(String mediaType, File file) throws IOException {
         // Place file in multipart/form-data message
-//        Log.e(file.getName())file.
         RequestBody formBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addPart(
                         Headers.of("Content-Disposition", "form-data; name=\"type\""),
                         RequestBody.create(null, "file"))
                 .addFormDataPart(
-                        "FileToPrint", fileName, RequestBody.create(MediaType.parse(mediaType), file))
+                        "FileToPrint", file.getName(), RequestBody.create(MediaType.parse(mediaType), file))
                 .build();
 
         Request request = new Request.Builder()
