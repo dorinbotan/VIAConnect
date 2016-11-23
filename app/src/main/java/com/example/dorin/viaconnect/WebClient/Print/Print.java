@@ -2,8 +2,11 @@ package com.example.dorin.viaconnect.WebClient.Print;
 
 import android.util.Log;
 
-import com.example.dorin.viaconnect.Utils.StringParser;
 import com.example.dorin.viaconnect.WebClient.okhttp.MultipartBody;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,8 +82,9 @@ public class Print {
                 .add("Password", password)
                 .build();
 
+        // TODO log in to english version
         Request request = new Request.Builder()
-                .url("https://print.via.dk/login.cfm")
+                .url("https://print.via.dk/login.cfm?lang=en")
                 .post(formBody)
                 .build();
 
@@ -100,7 +104,6 @@ public class Print {
         client.newCall(request).execute().close();
     }
 
-    // TODO mediaType - is it needed?
     // Upload a file for printing
     public boolean sendJob(String mediaType, File file) throws IOException {
         // Place file in multipart/form-data message
@@ -151,6 +154,8 @@ public class Print {
                 .url("https://print.via.dk/index.cfm?action=deletejob&jid=" + JID)
                 .build();
 
+        Log.e("DELETE:", JID);
+
         client.newCall(request).execute();
     }
 
@@ -165,25 +170,24 @@ public class Print {
         return getPrintJobValues(response.body().string());
     }
 
-    // TODO Fix finding dateTimes
+    // TODO add jid
     private ArrayList<PrintJob> getPrintJobValues(String builder) {
-        String start = "<input name=\"JID\" type=\"hidden\" value=\"";
-        String end = "\">";
-        ArrayList<String> jid = StringParser.getStringsBetweenTags(builder, start, end);
-
-        start = "<td><a href=\"javascript:toggleSub('";
-        end = "</a></td>";
-        ArrayList<String> names = StringParser.getStringsBetweenTags(builder, start, end);
-
-        start = "<td style=\" width: 110px;\">";
-        end = "</td>";
-        ArrayList<String> dateTimes = StringParser.getStringsBetweenTags(builder, start, end);
+        Document html = Jsoup.parse(builder);
 
         ArrayList<PrintJob> toReturn = new ArrayList<>();
+        Elements elements = html.getElementsByAttribute("onmouseover");
 
-        if (jid.size() == names.size())
-            for (int i = 0; i < jid.size(); i++)
-                toReturn.add(new PrintJob(names.get(i).substring(11), dateTimes.get(i), jid.get(i)));
+        for(int i = 0; i < elements.size(); i++) {
+            String dateTime = elements.get(i).getElementsByAttributeValue("style", " width: 110px;").text();
+            String name = elements.get(i).getElementsByIndexEquals(2).text();
+            String pages = elements.get(i).getElementsByIndexEquals(3).text();
+            String status = elements.get(i).getElementsByIndexEquals(4).text();
+            String jid = "---";
+            if(status.equalsIgnoreCase("Awaiting release"))
+                jid = elements.get(i).getElementsByIndexEquals(5).toString().substring(48, 56);
+
+            toReturn.add(new PrintJob(name, dateTime, jid, pages, status));
+        }
 
         return toReturn;
     }
