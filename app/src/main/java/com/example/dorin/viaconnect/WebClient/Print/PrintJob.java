@@ -1,7 +1,7 @@
 package com.example.dorin.viaconnect.WebClient.Print;
 
 public class PrintJob {
-    public final static String[] states = { "Processing", "Awaiting release", "Printed" };
+    public final static String[] STATES = { "Processing", "Awaiting release", "Printed" };
 
     public String name;
     public String dateTime;
