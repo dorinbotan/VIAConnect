@@ -2,8 +2,6 @@ package com.example.dorin.viaconnect;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,15 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 
-import com.baoyz.swipemenulistview.SwipeMenu;
-import com.baoyz.swipemenulistview.SwipeMenuCreator;
-import com.baoyz.swipemenulistview.SwipeMenuItem;
-import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.dorin.viaconnect.utils.StringParser;
 import com.example.dorin.viaconnect.webClient.print.MediaType;
-import com.example.dorin.viaconnect.webClient.print.Print;
 import com.example.dorin.viaconnect.webClient.print.PrintJob;
 import com.example.dorin.viaconnect.webClient.WebClient;
 
@@ -33,9 +25,6 @@ public class PrintActivity extends AppCompatActivity {
 
     private ArrayList<PrintJob> printJobs;
 
-    private SwipeMenuListView printJobList;
-    private ArrayAdapter<String> adapter;
-    private ArrayList<String> names;
     private FloatingActionButton fab;
 
     private WebClient webClient;
@@ -44,8 +33,6 @@ public class PrintActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_print);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         setup();
 
@@ -60,12 +47,6 @@ public class PrintActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        names = new ArrayList<>();
-
-        printJobList = (SwipeMenuListView) findViewById(R.id.printJobListView);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_activated_1, names);
-        printJobList.setAdapter(adapter);
-
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,64 +54,6 @@ public class PrintActivity extends AppCompatActivity {
                 performFileSearch();
             }
         });
-
-        setupSwipeMenu();
-    }
-
-    // Setup the ListView
-    private void setupSwipeMenu() {
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
-            @Override
-            public void create(SwipeMenu menu) {
-                SwipeMenuItem openItem = new SwipeMenuItem(getApplicationContext());
-                openItem.setBackground(new ColorDrawable(getResources().getColor(R.color.colorAccent1)));
-                openItem.setWidth(150);
-                openItem.setTitle("Print");
-                openItem.setTitleSize(15);
-                openItem.setTitleColor(Color.BLACK);
-                menu.addMenuItem(openItem);
-
-                SwipeMenuItem deleteItem = new SwipeMenuItem(getApplicationContext());
-                deleteItem.setBackground(new ColorDrawable(getResources().getColor(R.color.colorAccent6)));
-                deleteItem.setWidth(150);
-                deleteItem.setTitle("Delete");
-                deleteItem.setTitleSize(15);
-                deleteItem.setTitleColor(Color.BLACK);
-                menu.addMenuItem(deleteItem);
-            }
-        };
-
-        printJobList.setMenuCreator(creator);
-
-        printJobList.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                switch (index) {
-                    case 0:
-                        // Print
-                        webClient.printJob(printJobs.get(position).jid, Print.PID_CAMPUS_HORSENS,
-                                1, 1, Integer.parseInt(printJobs.get(position).pages), Print.DUPLEX_NONE, false);
-                        break;
-                    case 1:
-                        // Delete
-                        webClient.deletePrintJob(printJobs.get(position).jid);
-                        break;
-                }
-
-                printJobs.remove(position);
-                adapter.notifyDataSetChanged();
-
-                try {
-                    buttonClicked(null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                return false;
-            }
-        });
-
-        printJobList.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
     }
 
     @Override
@@ -192,17 +115,5 @@ public class PrintActivity extends AppCompatActivity {
 
     public void updateListView(ArrayList<PrintJob> printJobs) {
         this.printJobs = printJobs;
-
-        names.clear();
-
-        if (printJobs.size() != 0)
-            for (PrintJob p : printJobs) {
-                if(p.name.length() < 35)
-                    names.add(p.name + "\nDate:  " + p.dateTime);
-                else
-                    names.add(p.name.substring(0, 35) + "..." + "\nDate:  " + p.dateTime);
-            }
-
-        adapter.notifyDataSetChanged();
     }
 }
