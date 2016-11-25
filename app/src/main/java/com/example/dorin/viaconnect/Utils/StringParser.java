@@ -1,4 +1,4 @@
-package com.example.dorin.viaconnect.Utils;
+package com.example.dorin.viaconnect.utils;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,8 +6,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-
-import java.util.ArrayList;
 
 public class StringParser {
     @Nullable

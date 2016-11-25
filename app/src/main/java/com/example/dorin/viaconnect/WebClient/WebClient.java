@@ -1,11 +1,11 @@
-package com.example.dorin.viaconnect.WebClient;
+package com.example.dorin.viaconnect.webClient;
 
 import android.app.Application;
 
 import com.example.dorin.viaconnect.LoginActivity;
 import com.example.dorin.viaconnect.PrintActivity;
-import com.example.dorin.viaconnect.WebClient.Print.Print;
-import com.example.dorin.viaconnect.WebClient.Print.PrintJob;
+import com.example.dorin.viaconnect.webClient.print.Print;
+import com.example.dorin.viaconnect.webClient.print.PrintJob;
 
 import java.io.File;
 import java.io.IOException;

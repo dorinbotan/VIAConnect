@@ -1,8 +1,8 @@
-package com.example.dorin.viaconnect.WebClient.Print;
+package com.example.dorin.viaconnect.webClient.print;
 
 import android.util.Log;
 
-import com.example.dorin.viaconnect.WebClient.okhttp.MultipartBody;
+import com.example.dorin.viaconnect.webClient.okhttp.MultipartBody;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -170,11 +170,11 @@ public class Print {
         return getPrintJobValues(response.body().string());
     }
 
-    // TODO add jid
+    // TODO find the bug
     private ArrayList<PrintJob> getPrintJobValues(String builder) {
-        Document html = Jsoup.parse(builder);
-
         ArrayList<PrintJob> toReturn = new ArrayList<>();
+
+        Document html = Jsoup.parse(builder);
         Elements elements = html.getElementsByAttribute("onmouseover");
 
         for(int i = 0; i < elements.size(); i++) {
@@ -184,7 +184,7 @@ public class Print {
             String status = elements.get(i).getElementsByIndexEquals(4).text();
             String jid = "---";
             if(status.equalsIgnoreCase("Awaiting release"))
-                jid = elements.get(i).getElementsByIndexEquals(5).toString().substring(48, 56);
+                jid = elements.get(i).getElementsByTag("a").toString().substring(48, 56);
 
             toReturn.add(new PrintJob(name, dateTime, jid, pages, status));
         }

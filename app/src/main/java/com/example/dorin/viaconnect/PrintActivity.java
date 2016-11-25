@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,11 +18,11 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.example.dorin.viaconnect.Utils.StringParser;
-import com.example.dorin.viaconnect.WebClient.Print.MediaType;
-import com.example.dorin.viaconnect.WebClient.Print.Print;
-import com.example.dorin.viaconnect.WebClient.Print.PrintJob;
-import com.example.dorin.viaconnect.WebClient.WebClient;
+import com.example.dorin.viaconnect.utils.StringParser;
+import com.example.dorin.viaconnect.webClient.print.MediaType;
+import com.example.dorin.viaconnect.webClient.print.Print;
+import com.example.dorin.viaconnect.webClient.print.PrintJob;
+import com.example.dorin.viaconnect.webClient.WebClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,7 +109,7 @@ public class PrintActivity extends AppCompatActivity {
                     case 0:
                         // Print
                         webClient.printJob(printJobs.get(position).jid, Print.PID_CAMPUS_HORSENS,
-                                1, 1, 1, Print.DUPLEX_NONE, false);
+                                1, 1, Integer.parseInt(printJobs.get(position).pages), Print.DUPLEX_NONE, false);
                         break;
                     case 1:
                         // Delete
@@ -198,8 +196,12 @@ public class PrintActivity extends AppCompatActivity {
         names.clear();
 
         if (printJobs.size() != 0)
-            for (PrintJob p : printJobs)
-                names.add(p.name + "\nDate:  " + p.dateTime);
+            for (PrintJob p : printJobs) {
+                if(p.name.length() < 35)
+                    names.add(p.name + "\nDate:  " + p.dateTime);
+                else
+                    names.add(p.name.substring(0, 35) + "..." + "\nDate:  " + p.dateTime);
+            }
 
         adapter.notifyDataSetChanged();
     }

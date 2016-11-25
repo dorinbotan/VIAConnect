@@ -14,8 +14,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.dorin.viaconnect.Utils.StringParser;
-import com.example.dorin.viaconnect.WebClient.WebClient;
+import com.example.dorin.viaconnect.utils.StringParser;
+import com.example.dorin.viaconnect.webClient.WebClient;
 
 import java.io.File;
 
