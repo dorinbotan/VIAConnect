@@ -8,4 +8,9 @@
     <color name="colorAccent4">#ffbe50</color>
     <color name="colorAccent5">#ff9164</color>
     <color name="colorAccent6">#ff7369</color>
+
+    <color name="myColor1">#f7c800</color>
+    <color name="myColor2">#ed3323</color>
+    <color name="myColor3">#194091</color>
+    <color name="myColor4">#009edb</color>
 </resources>

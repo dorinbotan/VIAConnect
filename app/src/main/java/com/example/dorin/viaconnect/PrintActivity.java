@@ -5,17 +5,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.dorin.viaconnect.utils.StringParser;
-import com.example.dorin.viaconnect.webClient.PrintJobListViewAdapter;
 import com.example.dorin.viaconnect.webClient.print.MediaType;
 import com.example.dorin.viaconnect.webClient.print.PrintJob;
 import com.example.dorin.viaconnect.webClient.WebClient;
@@ -28,11 +26,14 @@ public class PrintActivity extends AppCompatActivity {
     private static final int READ_REQUEST_CODE = 42;
 
     private ArrayList<PrintJob> printJobs = new ArrayList<>();
-    private PrintJobListViewAdapter adapter;
-
-    private FloatingActionButton fab;
+    private PrintListViewAdapter adapter;
 
     private WebClient webClient;
+
+    private SwipeRefreshLayout swipeContainer;
+    private FloatingActionButton fab;
+
+    private PrintActivity v = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +51,23 @@ public class PrintActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        webClient = (WebClient) getApplicationContext();
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // TODO ugly here
+                // TODO make async
+                webClient.getPrintJobs(v);
+                swipeContainer.setRefreshing(false);
+            }
+        });
 
-        adapter = new PrintJobListViewAdapter(this, R.layout.printjob_layout, printJobs);
-        ListView listView = (ListView) findViewById(R.id.printJobListView);
-        listView.setAdapter(adapter);
+        swipeContainer.setColorSchemeResources(R.color.colorAccent1,
+                R.color.colorAccent2,
+                R.color.colorAccent3,
+                R.color.colorAccent4,
+                R.color.colorAccent5,
+                R.color.colorAccent6);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -63,29 +76,12 @@ public class PrintActivity extends AppCompatActivity {
                 performFileSearch();
             }
         });
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+        webClient = (WebClient) getApplicationContext();
 
-    // TODO what are you doing?
-    // Refresh the ListView
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_refresh:
-                try {
-                    buttonClicked(null);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        adapter = new PrintListViewAdapter(this, R.layout.printjob_layout, printJobs);
+        ListView listView = (ListView) findViewById(R.id.printJobListView);
+        listView.setAdapter(adapter);
     }
 
     // Upload file to printing server
@@ -119,10 +115,7 @@ public class PrintActivity extends AppCompatActivity {
         startActivityForResult(intent, READ_REQUEST_CODE);
     }
 
-    public void buttonClicked(View view) throws IOException {
-        webClient.getPrintJobs(this);
-    }
-
+    // Callback methods
     public void updateListView(ArrayList<PrintJob> printJobs) {
         this.printJobs.clear();
         this.printJobs.addAll(printJobs);
