@@ -7,26 +7,28 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
 import com.example.dorin.viaconnect.utils.StringParser;
 import com.example.dorin.viaconnect.webClient.print.MediaType;
+import com.example.dorin.viaconnect.webClient.print.Print;
 import com.example.dorin.viaconnect.webClient.print.PrintJob;
 import com.example.dorin.viaconnect.webClient.WebClient;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class PrintActivity extends AppCompatActivity {
     private static final int READ_REQUEST_CODE = 42;
 
     private ArrayList<PrintJob> printJobs = new ArrayList<>();
-    private PrintListViewAdapter adapter;
+    private RecyclerView recyclerView;
+    private PrintListAdapter adapter;
 
     private WebClient webClient;
 
@@ -79,9 +81,13 @@ public class PrintActivity extends AppCompatActivity {
 
         webClient = (WebClient) getApplicationContext();
 
-        adapter = new PrintListViewAdapter(this, R.layout.printjob_layout, printJobs);
-        ListView listView = (ListView) findViewById(R.id.printJobListView);
-        listView.setAdapter(adapter);
+        recyclerView = (RecyclerView) findViewById(R.id.printjob_recycler_view);
+
+        adapter = new PrintListAdapter(printJobs);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
     }
 
     // Upload file to printing server
