@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.example.dorin.viaconnect.utils.StringParser;
+import com.example.dorin.viaconnect.webClient.PrintJobListViewAdapter;
 import com.example.dorin.viaconnect.webClient.print.MediaType;
 import com.example.dorin.viaconnect.webClient.print.PrintJob;
 import com.example.dorin.viaconnect.webClient.WebClient;
@@ -23,7 +27,8 @@ import java.util.ArrayList;
 public class PrintActivity extends AppCompatActivity {
     private static final int READ_REQUEST_CODE = 42;
 
-    private ArrayList<PrintJob> printJobs;
+    private ArrayList<PrintJob> printJobs = new ArrayList<>();
+    private PrintJobListViewAdapter adapter;
 
     private FloatingActionButton fab;
 
@@ -41,11 +46,15 @@ public class PrintActivity extends AppCompatActivity {
 
     // Setup the layout
     private void setup() {
-        webClient = (WebClient) getApplicationContext();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        webClient = (WebClient) getApplicationContext();
+
+        adapter = new PrintJobListViewAdapter(this, R.layout.printjob_layout, printJobs);
+        ListView listView = (ListView) findViewById(R.id.printJobListView);
+        listView.setAdapter(adapter);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +71,7 @@ public class PrintActivity extends AppCompatActivity {
         return true;
     }
 
+    // TODO what are you doing?
     // Refresh the ListView
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -114,6 +124,9 @@ public class PrintActivity extends AppCompatActivity {
     }
 
     public void updateListView(ArrayList<PrintJob> printJobs) {
-        this.printJobs = printJobs;
+        this.printJobs.clear();
+        this.printJobs.addAll(printJobs);
+
+        adapter.notifyDataSetChanged();
     }
 }

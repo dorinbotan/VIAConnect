@@ -16,4 +16,8 @@ public class PrintJob {
         this.pages = pages;
         this.status = status;
     }
+
+    public String toString() {
+        return name + " " + dateTime + " " + pages + " " + jid + " " + status;
+    }
 }
