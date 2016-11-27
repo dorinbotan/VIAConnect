@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.dorin.viaconnect.utils.StringParser;
 import com.example.dorin.viaconnect.webClient.print.MediaType;
@@ -84,10 +85,24 @@ public class PrintActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.printjob_recycler_view);
 
         adapter = new PrintListAdapter(printJobs);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Toast.makeText(getApplicationContext(), printJobs.get(position).name +
+                        " clicked", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                Toast.makeText(getApplicationContext(), printJobs.get(position).name +
+                        " long clicked", Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 
     // Upload file to printing server

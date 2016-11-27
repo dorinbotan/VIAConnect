@@ -1,6 +1,7 @@
 package com.example.dorin.viaconnect;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.TextView;
 
 import com.example.dorin.viaconnect.webClient.print.PrintJob;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class PrintListAdapter extends RecyclerView.Adapter<PrintListAdapter.MyViewHolder> {
@@ -43,11 +46,26 @@ public class PrintListAdapter extends RecyclerView.Adapter<PrintListAdapter.MyVi
         PrintJob printJob = printJobList.get(position);
         holder.name.setText(printJob.name);
         holder.status.setText(printJob.status);
-        holder.time.setText(printJob.dateTime);
+        holder.time.setText(getTime(printJob.dateTime));
     }
 
     @Override
     public int getItemCount() {
         return printJobList.size();
+    }
+
+    int i = 1;
+
+    private String getTime(String dateTime) {
+        Log.e("Date", dateTime);
+
+        Date date = new Date(16, 1, 1);
+        Log.e("DateTime", date.toString());
+
+        Calendar c = Calendar.getInstance();
+        Log.e("Current time", c.getTime().toString());
+
+        i += 5;
+        return i + " m" ;
     }
 }
