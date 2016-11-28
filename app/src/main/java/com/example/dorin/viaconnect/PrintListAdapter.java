@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.example.dorin.viaconnect.webClient.print.PrintJob;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -54,18 +56,39 @@ public class PrintListAdapter extends RecyclerView.Adapter<PrintListAdapter.MyVi
         return printJobList.size();
     }
 
-    int i = 1;
-
     private String getTime(String dateTime) {
-        Log.e("Date", dateTime);
+        String now = new SimpleDateFormat("dd-MM-yy HH:mm").format(Calendar.getInstance().getTime());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
 
-        Date date = new Date(16, 1, 1);
-        Log.e("DateTime", date.toString());
+        try {
+            Date date1 = simpleDateFormat.parse(dateTime);
+            Date date2 = simpleDateFormat.parse(now);
 
-        Calendar c = Calendar.getInstance();
-        Log.e("Current time", c.getTime().toString());
+            long different = date2.getTime() - date1.getTime();
 
-        i += 5;
-        return i + " m" ;
+            int minutesInMilli = 60000;
+            int hoursInMilli = minutesInMilli * 60;
+            int daysInMilli = hoursInMilli * 60;
+
+            long elapsedDays = different / daysInMilli;
+            different = different % daysInMilli;
+
+            long elapsedHours = different / hoursInMilli;
+            different = different % hoursInMilli;
+
+            long elapsedMinutes = different / minutesInMilli;
+
+            if(elapsedDays > 0)
+                return elapsedDays + " d";
+            else if(elapsedHours > 0)
+                return elapsedHours + " h";
+            else if(elapsedMinutes > 0)
+                return elapsedMinutes + " m";
+            else
+                return "now";
+        } catch (ParseException e) {
+            Log.e("Error:", "Unable to parse dateTime");
+            return "unknown";
+        }
     }
 }
