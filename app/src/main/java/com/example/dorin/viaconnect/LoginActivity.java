@@ -10,11 +10,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.dorin.viaconnect.activities.PrintActivity;
 import com.example.dorin.viaconnect.utils.StringParser;
 import com.example.dorin.viaconnect.webClient.WebClient;
 

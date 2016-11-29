@@ -3,7 +3,7 @@ package com.example.dorin.viaconnect.webClient;
 import android.app.Application;
 
 import com.example.dorin.viaconnect.LoginActivity;
-import com.example.dorin.viaconnect.PrintActivity;
+import com.example.dorin.viaconnect.activities.PrintActivity;
 import com.example.dorin.viaconnect.webClient.print.Print;
 import com.example.dorin.viaconnect.webClient.print.PrintJob;
 
@@ -142,6 +142,18 @@ public class WebClient extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void printJob(final PrintJob printJob, final String PID) throws IOException {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    print.printJob(printJob, PID);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public void printJob(final String JID, final String PID, final int numberOfCopies, final int pageFrom,

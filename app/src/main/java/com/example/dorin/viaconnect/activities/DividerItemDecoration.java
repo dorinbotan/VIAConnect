@@ -1,4 +1,4 @@
-package com.example.dorin.viaconnect;
+package com.example.dorin.viaconnect.activities;
 
 import android.content.Context;
 import android.content.res.TypedArray;

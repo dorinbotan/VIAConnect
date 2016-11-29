@@ -1,4 +1,4 @@
-package com.example.dorin.viaconnect;
+package com.example.dorin.viaconnect.activities;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -10,13 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.dorin.viaconnect.R;
 import com.example.dorin.viaconnect.utils.StringParser;
 import com.example.dorin.viaconnect.webClient.print.MediaType;
 import com.example.dorin.viaconnect.webClient.print.Print;
@@ -24,6 +22,7 @@ import com.example.dorin.viaconnect.webClient.print.PrintJob;
 import com.example.dorin.viaconnect.webClient.WebClient;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class PrintActivity extends AppCompatActivity {
@@ -61,9 +60,7 @@ public class PrintActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 // TODO ugly here
-                // TODO make async
                 webClient.getPrintJobs(v);
-                swipeContainer.setRefreshing(false);
             }
         });
 
@@ -100,9 +97,12 @@ public class PrintActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onLongClick(View view, int position) {
+            public void onLongClick(View view, int position) throws IOException {
+                // TODO not working
+                webClient.printJob(printJobs.get(position), Print.PID_CAMPUS_HORSENS);
+
                 Toast.makeText(getApplicationContext(), printJobs.get(position).name +
-                        " long clicked", Toast.LENGTH_SHORT).show();
+                        " printed", Toast.LENGTH_SHORT).show();
             }
         }));
     }
@@ -144,5 +144,6 @@ public class PrintActivity extends AppCompatActivity {
         this.printJobs.addAll(printJobs);
 
         adapter.notifyDataSetChanged();
+        swipeContainer.setRefreshing(false);
     }
 }

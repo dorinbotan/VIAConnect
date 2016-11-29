@@ -22,7 +22,7 @@
         </activity>
 
         <activity
-            android:name=".PrintActivity"
+            android:name=".activities.PrintActivity"
             android:label="@string/files"
             android:theme="@style/AppTheme"
             android:parentActivityName=".LoginActivity"

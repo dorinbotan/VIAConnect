@@ -1,10 +1,12 @@
-package com.example.dorin.viaconnect;
+package com.example.dorin.viaconnect.activities;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.io.IOException;
 
 public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
     private GestureDetector gestureDetector;
@@ -23,7 +25,11 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
                 View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
 
                 if (child != null && clickListener != null)
-                    clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+                    try {
+                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
             }
         });
     }

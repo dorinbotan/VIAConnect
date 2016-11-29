@@ -23,9 +23,9 @@ import okhttp3.Response;
 public class Print {
     private final int CODE_OK = 200;
     private final int CODE_FOUND = 302;
-    public final static int DUPLEX_NONE = 1;
-    public final static int DUPLEX_LONG_SIDE = 2;
-    public final static int DUPLEX_SHORT_SIDE = 3;
+    public final static String DUPLEX_NONE = "1";
+    public final static String DUPLEX_LONG_SIDE = "2";
+    public final static String DUPLEX_SHORT_SIDE = "3";
 
     public final static String PID_CLOTHING_MECHANICS_IN_MEJLGADE = "Eqc=";
     public final static String PID_CFUIHE_HP_P3015 = "EaY=";
@@ -82,9 +82,9 @@ public class Print {
                 .add("Password", password)
                 .build();
 
-        // TODO log in to english version
+        // TODO log in to english version (?lang=en)
         Request request = new Request.Builder()
-                .url("https://print.via.dk/login.cfm?lang=en")
+                .url("https://print.via.dk/login.cfm")
                 .post(formBody)
                 .build();
 
@@ -148,6 +148,28 @@ public class Print {
         client.newCall(request).execute();
     }
 
+    public void printJob(PrintJob printJob, String PID) throws IOException {
+        RequestBody formBody = new FormBody.Builder()
+                .add("JID", printJob.jid)
+                .add("PID", PID)
+                .add("NumberOfCopies", "1")
+                .add("PageFrom", "1")
+                .add("PageTo", printJob.pages)
+                .add("Duplex", DUPLEX_NONE)
+                .add("PrintBW", "True")
+                .add("method", "printjob")
+                .build();
+
+        Log.e("JID", printJob.toString());
+
+        Request request = new Request.Builder()
+                .url("https://print.via.dk/afunctions.cfm")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).execute();
+    }
+
     // Remove file from printing list
     public void deleteJob(String JID) throws IOException {
         Request request = new Request.Builder()
@@ -184,7 +206,7 @@ public class Print {
             String status = elements.get(i).getElementsByIndexEquals(4).text();
             String jid = "---";
             if(status.equalsIgnoreCase("Awaiting release"))
-                jid = elements.get(i).getElementsByTag("a").toString().substring(48, 56);
+                jid = elements.get(i).getElementsByTag("a").get(2).toString().substring(44, 52);
 
             toReturn.add(new PrintJob(name, dateTime, jid, pages, status));
         }
